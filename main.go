@@ -33,7 +33,7 @@ var (
 func getData() {
 	var url string
 	if access_key != "" {
-		url = "https://ipinfo.io?access_key=" + access_key
+		url = "https://ipinfo.io?token=" + access_key
 	} else {
 		url = "https://ipinfo.io"
 	}
@@ -48,6 +48,7 @@ func getData() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	// TODO if there's a problem with the API response we should print it.
 	defer resp.Body.Close()
 }
 
