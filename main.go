@@ -22,10 +22,22 @@ type info struct {
 	Readme   string `json:"readme"`
 }
 
-var i *info = &info{}
+var (
+	// Access key for API
+	access_key string
 
-func init() {
-	resp, err := http.Get("https://ipinfo.io")
+	// Response object
+	i *info = &info{}
+)
+
+func getData() {
+	var url string
+	if access_key != "" {
+		url = "https://ipinfo.io?access_key=" + access_key
+	} else {
+		url = "https://ipinfo.io"
+	}
+	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -47,8 +59,14 @@ func main() {
 	// Accept input flag for format string.
 	flag.StringVar(&format, "f", "%city% %country%", "format of output")
 
+	// Access key flag
+	flag.StringVar(&access_key, "k", "", "API access key")
+
 	// Parse the input flags.
 	flag.Parse()
+
+	// Retrieve data from response
+	getData()
 
 	// Copy the format string to a new variable.
 	output := format
